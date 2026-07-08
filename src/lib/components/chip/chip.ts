@@ -1,0 +1,104 @@
+import { Component, input, output } from '@angular/core';
+import { MixChipVariant } from '../../config/mixology-ui.config';
+import { Icon } from '../icon/icon';
+
+@Component({
+  selector: 'mix-chip',
+  standalone: true,
+  imports: [Icon],
+  host: {
+    '[attr.data-variant]': 'variant()',
+    '[class.is-selected]': 'selected()',
+  },
+  templateUrl: './chip.html',
+  styles: [
+    `
+      :host {
+        --mix-chip-bg: var(--surface-soft);
+        --mix-chip-color: var(--text-color);
+        --mix-chip-border: var(--border-soft);
+        --mix-chip-selected-bg: var(--primary);
+        --mix-chip-selected-color: var(--surface-solid);
+        display: inline-flex;
+      }
+
+      .mix-chip-shell {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        border: 1px solid var(--mix-chip-border);
+        border-radius: 999px;
+        padding: 0.2rem;
+        background: var(--mix-chip-bg);
+      }
+
+      .mix-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: 0;
+        border-radius: 999px;
+        padding: 0.25rem 0.6rem;
+        background: transparent;
+        color: var(--mix-chip-color);
+        cursor: pointer;
+      }
+
+      .mix-chip:disabled,
+      .mix-chip__remove:disabled {
+        opacity: var(--opacity-disabled);
+        cursor: not-allowed;
+      }
+
+      .mix-chip__remove {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--mix-chip-color);
+        cursor: pointer;
+      }
+
+      :host(.is-selected) {
+        --mix-chip-bg: var(--mix-chip-selected-bg);
+        --mix-chip-color: var(--mix-chip-selected-color);
+      }
+
+      :host([data-variant='outlined']) .mix-chip-shell {
+        background: transparent;
+      }
+
+      :host([data-variant='soft']) .mix-chip-shell {
+        background: var(--active-soft);
+      }
+    `,
+  ],
+})
+export class Chip {
+  readonly label = input('');
+  readonly selected = input(false);
+  readonly removable = input(false);
+  readonly disabled = input(false);
+  readonly variant = input<MixChipVariant>('filled');
+  readonly removeAriaLabel = input('Remove item');
+
+  readonly clicked = output<void>();
+  readonly removed = output<void>();
+
+  onClick(): void {
+    if (!this.disabled()) {
+      this.clicked.emit();
+    }
+  }
+
+  onRemove(event: Event): void {
+    event.stopPropagation();
+    if (!this.disabled()) {
+      this.removed.emit();
+    }
+  }
+}

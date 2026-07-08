@@ -1,0 +1,23 @@
+<div class="mix-chip-shell">
+  <button type="button" class="mix-chip" [disabled]="disabled()" (click)="onClick()">
+    <span class="mix-chip__label">
+      @if (label()) {
+        {{ label() }}
+      } @else {
+        <ng-content></ng-content>
+      }
+    </span>
+  </button>
+
+  @if (removable()) {
+    <button
+      type="button"
+      class="mix-chip__remove"
+      [disabled]="disabled()"
+      [attr.aria-label]="removeAriaLabel()"
+      (click)="onRemove($event)"
+    >
+      <mix-icon name="xmark-solid-full" [size]="12" [decorative]="true" />
+    </button>
+  }
+</div>

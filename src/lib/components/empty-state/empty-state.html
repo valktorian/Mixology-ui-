@@ -1,0 +1,10 @@
+<section class="mix-empty-state">
+  <mix-icon class="mix-empty-state__icon" [name]="icon()" [size]="28" [decorative]="true" />
+  <h3 class="mix-empty-state__title">{{ title() }}</h3>
+  @if (description()) {
+    <p class="mix-empty-state__description">{{ description() }}</p>
+  }
+  <div class="mix-empty-state__actions">
+    <ng-content></ng-content>
+  </div>
+</section>
